@@ -25,8 +25,6 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
 
 Introducing **everything-rag**, your fully customizable and local chatbot assistant! 🤖
 
- Sure, here's a modified version of the readme that emphasizes the RAG with chat_history functionality in ConversationalRetrievalChain:
-
 With everything-rag, you can:
 
 1. Use virtually any LLM you want: Switch between different LLMs like _gemma-7b_ or _llama-7b_ to suit your needs.
