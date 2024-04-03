@@ -6,7 +6,6 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
 <div align="center">
     <hr>
     <img src="https://img.shields.io/github/languages/top/AstraBert/everything-rag" alt="GitHub top language">
-    <img src="https://img.shields.io/github/languages/top/AstraBert/everything-rag" alt="GitHub top language">
    <img src="https://img.shields.io/github/commit-activity/t/AstraBert/everything-rag" alt="GitHub commit activity">
    <img src="https://img.shields.io/badge/everything_rag-partially stable-orange" alt="Static Badge">
    <img src="https://img.shields.io/badge/Release-v0.0.0-blue" alt="Static Badge">
