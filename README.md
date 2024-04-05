@@ -4,17 +4,21 @@
 _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a32)!_ 🤖
 
 <div align="center">
-    <hr>
     <img src="https://img.shields.io/github/languages/top/AstraBert/everything-rag" alt="GitHub top language">
    <img src="https://img.shields.io/github/commit-activity/t/AstraBert/everything-rag" alt="GitHub commit activity">
    <img src="https://img.shields.io/badge/everything_rag-partially stable-orange" alt="Static Badge">
-   <img src="https://img.shields.io/badge/Release-v0.0.0-blue" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Release-v0.1.0-blue" alt="Static Badge">
+   <div>
+        <a href="https://astrabert.github.io/everything-rag/"><img src="./data/example_chat.png" alt="Example chat" align="center"></a>
+        <p><i>Example chat with everything-rag, mediated by google/flan-t5-base</i></p>
+   </div>
 </div>
 
 
 ### Table of Contents
 
 1. [Introduction](#introduction)
+2. [Inspiration](#inspiration)
 2. [Getting Started](#getting-started)
 3. [Using the Chatbot](#using-the-chatbot)
 4. [Troubleshooting](#troubleshooting)
@@ -38,22 +42,35 @@ While everything-rag offers many benefits, there are a couple of limitations to 
 
 In summary, everything-rag is a simple, customizable, and local chatbot assistant that offers a wide range of features and capabilities. By leveraging the power of RAG, everything-rag offers a unique and flexible chatbot experience that can be tailored to your specific needs and preferences. Whether you're looking for a simple chatbot to answer basic questions or a more advanced conversational AI to engage with your users, everything-rag has got you covered.😊
 
+## Inspiration
+
+This project is a humble and modest carbon-copy of its main and true inspirations, i.e. [Jan.ai](https://jan.ai/), [Cheshire Cat AI](https://cheshirecat.ai/), [privateGPT](https://privategpt.io/) and many other projects that focus on making LLMs (and AI in general) open-source and easily accessible to everyone. 
+
 ## Getting Started
 
 You can do two things:
 
 - Play with generation on [Kaggle](https://www.kaggle.com/code/astrabertelli/gemma-for-datasciences)
 - Clone this repository, head over to [the python script](./scripts/gemma_for_datasciences.py) and modify everything to your needs!
+- Docker installation(⚠️**NOT YET FULLY IMPLEMENTED**): you will be able, **in the near future**, to install everything-rag through docker image and running it thanks do Docker by following these really simple commands:
 
-😇🤪Coming soon... Installation through Docker image!
+```bash
+docker pull ghcr.io/AstraBert/everything-rag:latest
+docker run everything-rag:latest -e "model=microsoft/phi-2" -e "task=text-generation"
+```
+- As you can see, you just need to specify the LLM model and its task. Keep in mind that, for what concerns v0.1.0, everything-rag supports only text-generation and text2text-generation (this is not even mandatory: if not specified, the image employes directly google/flan-t5-base, a model for text2text-generation). For these two tasks, you can use virtually *any* model from HuggingFace Hub: the sole recommendation is to watch out for your disk space, RAM and CPU power, LLMs can be quite resource-consuming!
 
 ## Using the Chatbot
 
 ### GUI
 
-The chatbot has a simple GUI built using tkinter. The GUI displays the chat history and allows the user to input queries. The user can send a message by pressing the "Send" button.
+The chatbot has a brand-new GradIO-based interface that runs on local server. You can interact by uploading directly your pdf files and/or sending messages, all (for now), by running:
 
-### Code breakdown
+```bash
+python3 scripts/chat.py -m provider/modelname -t task
+```
+
+### Code breakdown - notebook
 
 Everything is explained in [the dedicated notebook](./scripts/gemma-for-datasciences.ipynb), but here's a brief breakdown of the code:
 
@@ -66,7 +83,6 @@ Everything is explained in [the dedicated notebook](./scripts/gemma-for-datascie
 
 Et voilà, your chatbot is up and running!🦿
 
-
 ## Troubleshooting
 
 ### Common Issues Q&A
@@ -77,8 +93,10 @@ Et voilà, your chatbot is up and running!🦿
     > A: This is quite common with resource-limited environments that deal with too large or too small models: large models require **at least** 32 GB RAM and >8 core CPU, whereas small model can easily be allucinating and producing responses that are endless repetitions of the same thing! Check *penalty_score* parameter to avoid this. **try rephrasing the query and be as specific as possible**
 * Q: My model is allucinatin and/or repeating the same sentence over and over again😵‍💫
     > A: This is quite common with small or old models: check *penalty_score* and *temperature* parameter to avoid this. 
-* The chatbot is giving incorrect/non-meaningful answers🤥
+* Q: The chatbot is giving incorrect/non-meaningful answers🤥
     >A: Check that the PDF document is relevant and up-to-date. Also, **try rephrasing the query and be as specific as possible**
+* Q: An error occurred while generating the answer💔
+    >A: This frequently occures when your (small) LLM has a limited maximum hidden size (generally 512 or 1024) and the context that the retrieval-augmented chain produces goes beyond that maximum. You could, potentially, modify the configuration of the model, but this would mean dramatically increase its resource consumption, and your small laptop is not prepared to take it, trust me!!! A solution, if you have enough RAM and CPU power, is to switch to larger LLMs: they do not have problems in this sense.
 
 ## Contributing
 
@@ -92,9 +110,9 @@ Contributions are welcome! If you would like to improve the chatbot's functional
 * [Langchain-community](https://github.com/langchain-community/langchain-community)
 * [Tkinter](https://docs.python.org/3/library/tkinter.html)
 * [PDF document about data science](https://www.kaggle.com/datasets/astrabertelli/what-is-datascience-docs)
+* [GradIO](https://www.gradio.app/)
 
 ## License
-
 
 This project is licensed under the Apache 2.0 License.
 
