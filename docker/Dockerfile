@@ -29,16 +29,9 @@ ARG version="v0.1.0"
 # Echo version
 RUN echo "Started everything-rag ${version}"
 
-# Set default model and task
-ENV model="google/flan-t5-base"
-
-ENV task="text2text-generation"
-
-# Run script to install and build the model for the first time
-RUN python3 utils.py -m ${model} -t ${task}
-
 # Expose the port that the application will run on
 EXPOSE 7860
 
 # Set the entrypoint with a default command and allow the user to override it
-ENTRYPOINT ["python3", "chat.py", "-m", "${model}", "-t", "${task}"]
+ENTRYPOINT ["python3", "chat.py"]
+
