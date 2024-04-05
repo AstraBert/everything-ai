@@ -67,11 +67,13 @@ docker run -p 7860:7860 everything-rag:latest -m microsoft/phi-2 -t text-generat
 
 ### GUI
 
-The chatbot has a brand-new GradIO-based interface that runs on local server. You can interact by uploading directly your pdf files and/or sending messages, all (for now), by running:
+The chatbot has a brand-new GradIO-based interface that runs on local server. You can interact by uploading directly your pdf files and/or sending messages, all by running:
 
 ```bash
 python3 scripts/chat.py -m provider/modelname -t task
 ```
+
+The suggested workflow is, nevertheless, the one that exploits Docker.
 
 ### Code breakdown - notebook
 
