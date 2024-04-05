@@ -6,8 +6,9 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
 <div align="center">
     <img src="https://img.shields.io/github/languages/top/AstraBert/everything-rag" alt="GitHub top language">
    <img src="https://img.shields.io/github/commit-activity/t/AstraBert/everything-rag" alt="GitHub commit activity">
-   <img src="https://img.shields.io/badge/everything_rag-partially stable-orange" alt="Static Badge">
+   <img src="https://img.shields.io/badge/everything_rag-almost_completely_stable-green" alt="Static Badge">
    <img src="https://img.shields.io/badge/Release-v0.1.0-blue" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Docker_image_size-6.44GB-red" alt="Static Badge">
    <div>
         <a href="https://astrabert.github.io/everything-rag/"><img src="./data/example_chat.png" alt="Example chat" align="center"></a>
         <p><i>Example chat with everything-rag, mediated by google/flan-t5-base</i></p>
@@ -52,13 +53,15 @@ You can do two things:
 
 - Play with generation on [Kaggle](https://www.kaggle.com/code/astrabertelli/gemma-for-datasciences)
 - Clone this repository, head over to [the python script](./scripts/gemma_for_datasciences.py) and modify everything to your needs!
-- Docker installation(⚠️**NOT YET FULLY IMPLEMENTED**): you will be able, **in the near future**, to install everything-rag through docker image and running it thanks do Docker by following these really simple commands:
+- Docker installation (🥳**FULLY IMPLEMENTED**): you can install everything-rag through docker image and running it thanks do Docker by following these really simple commands:
 
 ```bash
-docker pull ghcr.io/AstraBert/everything-rag:latest
-docker run everything-rag:latest -e "model=microsoft/phi-2" -e "task=text-generation"
+docker pull ghcr.io/astrabert/everything-rag:latest
+docker run -p 7860:7860 everything-rag:latest -m microsoft/phi-2 -t text-generation
 ```
-- As you can see, you just need to specify the LLM model and its task. Keep in mind that, for what concerns v0.1.0, everything-rag supports only text-generation and text2text-generation (this is not even mandatory: if not specified, the image employes directly google/flan-t5-base, a model for text2text-generation). For these two tasks, you can use virtually *any* model from HuggingFace Hub: the sole recommendation is to watch out for your disk space, RAM and CPU power, LLMs can be quite resource-consuming!
+- **IMPORTANT NOTE**: running the script within `docker run` does not log the port on which the app is running until you press `Ctrl+C`, but in that moment it also interrupt the execution! The app will run on port `0.0.0.0:7860`, so just make sure to open your browser on that port and to refresh it after 30s to 1 or 2 mins, when the model and the tokenizer should be loaded and the app should be ready to work!
+
+- As you can see, you just need to specify the LLM model and its task (this is mandatory). Keep in mind that, for what concerns v0.1.0, everything-rag supports only text-generation and text2text-generation. For these two tasks, you can use virtually *any* model from HuggingFace Hub: the sole recommendation is to watch out for your disk space, RAM and CPU power, LLMs can be quite resource-consuming!
 
 ## Using the Chatbot
 
