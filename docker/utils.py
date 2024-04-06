@@ -140,7 +140,7 @@ def just_chatting(
                     model=model,
                     tokenizer=tokenizer,
                     max_new_tokens = 2048,
-                    repetition_penalty = float(10),
+                    repetition_penalty = float(1.2),
     )
 
     local_llm = HuggingFacePipeline(pipeline=pipe)
@@ -159,7 +159,6 @@ try:
         mod,
     )
 
-    tokenizer.pad_token = tokenizer.eos_token
 
     model = TASK_TO_MODEL[tsk].from_pretrained(
         mod,

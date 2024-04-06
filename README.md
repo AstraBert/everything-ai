@@ -10,7 +10,7 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
    <img src="https://img.shields.io/badge/Release-v0.1.0-blue" alt="Static Badge">
    <img src="https://img.shields.io/badge/Docker_image_size-6.44GB-red" alt="Static Badge">
    <div>
-        <a href="https://astrabert.github.io/everything-rag/"><img src="./data/example_chat.png" alt="Example chat" align="center"></a>
+        <a href="https://huggingface.co/spaces/as-cle-bert/everything-rag"><img src="./data/example_chat.png" alt="Example chat" align="center"></a>
         <p><i>Example chat with everything-rag, mediated by google/flan-t5-base</i></p>
    </div>
 </div>
@@ -25,6 +25,20 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
 4. [Troubleshooting](#troubleshooting)
 5. [Contributing](#contributing)
 6. [References](#reference)
+
+## TL;DR
+
+* Q: This README is soooooo long, I want to get my hands dirty!!!
+    >A: You can do it in the [dedicated HuggingFace space](https://huggingface.co/spaces/as-cle-bert/everything-rag), based on google/flan-t5-base.
+
+<div>
+    <iframe
+        src="https://as-cle-bert-everything-rag.hf.space"
+        frameborder="0"
+        width="850"
+        height="450"
+    ></iframe>
+</div>
 
 ## Introduction
 

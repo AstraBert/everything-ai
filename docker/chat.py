@@ -34,7 +34,7 @@ def bot(history):
                 yield history
         else:
             try:
-                response = just_chatting(model=model, tokenizer=tokenizer, query=history[-1][0], vectordb=vectordb, chat_history=[convert_none_to_str(his) for his in history])["answer"]
+                response = just_chatting(task=tsk, model=model, tokenizer=tokenizer, query=history[-1][0], vectordb=vectordb, chat_history=[convert_none_to_str(his) for his in history])["answer"]
                 history[-1][1] = ""
                 for character in response:
                     history[-1][1] += character
@@ -70,9 +70,10 @@ with gr.Blocks() as demo:
     bot_msg.then(lambda: gr.MultimodalTextbox(interactive=True), None, [chat_input])
 
     chatbot.like(print_like_dislike, None, None)
-    gr.ClearButton(chatbot)
+    clear = gr.ClearButton(chatbot)
+
 demo.queue()
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", share=False)
+    demo.launch(share=False)
 
 	
