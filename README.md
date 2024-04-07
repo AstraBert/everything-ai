@@ -7,8 +7,9 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
     <img src="https://img.shields.io/github/languages/top/AstraBert/everything-rag" alt="GitHub top language">
    <img src="https://img.shields.io/github/commit-activity/t/AstraBert/everything-rag" alt="GitHub commit activity">
    <img src="https://img.shields.io/badge/everything_rag-almost_completely_stable-green" alt="Static Badge">
-   <img src="https://img.shields.io/badge/Release-v0.1.0-blue" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Release-v0.1.1-blue" alt="Static Badge">
    <img src="https://img.shields.io/badge/Docker_image_size-6.44GB-red" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Supported_platforms-linux/amd64-purple" alt="Static Badge">
    <div>
         <a href="https://huggingface.co/spaces/as-cle-bert/everything-rag"><img src="./data/example_chat.png" alt="Example chat" align="center"></a>
         <p><i>Example chat with everything-rag, mediated by google/flan-t5-base</i></p>
@@ -18,20 +19,22 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
 
 ### Table of Contents
 
+0. [TL;DR](#tldr)
 1. [Introduction](#introduction)
 2. [Inspiration](#inspiration)
 2. [Getting Started](#getting-started)
 3. [Using the Chatbot](#using-the-chatbot)
 4. [Troubleshooting](#troubleshooting)
 5. [Contributing](#contributing)
-6. [References](#reference)
+6. [Upcoming features](#upcoming-features🚀) 
+7. [References](#reference)
 
 ## TL;DR
 
-* Q: This README is soooooo long, I want to get my hands dirty!!!
-    >A: You can do it in the [dedicated HuggingFace space](https://huggingface.co/spaces/as-cle-bert/everything-rag), based on google/flan-t5-base.
+* This documentation is soooooo long, I want to get my hands dirty!!!
+    >You can try out everything-rag the [dedicated HuggingFace space](https://huggingface.co/spaces/as-cle-bert/everything-rag), based on google/flan-t5-large.
 
-<div>
+<div align="center">
     <iframe
         src="https://as-cle-bert-everything-rag.hf.space"
         frameborder="0"
@@ -73,7 +76,7 @@ You can do two things:
 docker pull ghcr.io/astrabert/everything-rag:latest
 docker run -p 7860:7860 everything-rag:latest -m microsoft/phi-2 -t text-generation
 ```
-- **IMPORTANT NOTE**: running the script within `docker run` does not log the port on which the app is running until you press `Ctrl+C`, but in that moment it also interrupt the execution! The app will run on port `0.0.0.0:7860`, so just make sure to open your browser on that port and to refresh it after 30s to 1 or 2 mins, when the model and the tokenizer should be loaded and the app should be ready to work!
+- **IMPORTANT NOTE**: running the script within `docker run` does not log the port on which the app is running until you press `Ctrl+C`, but in that moment it also interrupt the execution! The app will run on port `0.0.0.0:7860` (or `localhost:7860` if your browser is Windows-based), so just make sure to open your browser on that port and to refresh it after 30s to 1 or 2 mins, when the model and the tokenizer should be loaded and the app should be ready to work!
 
 - As you can see, you just need to specify the LLM model and its task (this is mandatory). Keep in mind that, for what concerns v0.1.0, everything-rag supports only text-generation and text2text-generation. For these two tasks, you can use virtually *any* model from HuggingFace Hub: the sole recommendation is to watch out for your disk space, RAM and CPU power, LLMs can be quite resource-consuming!
 
@@ -110,12 +113,20 @@ Et voilà, your chatbot is up and running!🦿
     > A: Make sure that the PDF document is in the specified path and that the database has been created successfully. 
 * Q: The chatbot is taking soooo long🫠
     > A: This is quite common with resource-limited environments that deal with too large or too small models: large models require **at least** 32 GB RAM and >8 core CPU, whereas small model can easily be allucinating and producing responses that are endless repetitions of the same thing! Check *penalty_score* parameter to avoid this. **try rephrasing the query and be as specific as possible**
-* Q: My model is allucinatin and/or repeating the same sentence over and over again😵‍💫
+* Q: My model is allucinating and/or repeating the same sentence over and over again😵‍💫
     > A: This is quite common with small or old models: check *penalty_score* and *temperature* parameter to avoid this. 
 * Q: The chatbot is giving incorrect/non-meaningful answers🤥
     >A: Check that the PDF document is relevant and up-to-date. Also, **try rephrasing the query and be as specific as possible**
 * Q: An error occurred while generating the answer💔
-    >A: This frequently occures when your (small) LLM has a limited maximum hidden size (generally 512 or 1024) and the context that the retrieval-augmented chain produces goes beyond that maximum. You could, potentially, modify the configuration of the model, but this would mean dramatically increase its resource consumption, and your small laptop is not prepared to take it, trust me!!! A solution, if you have enough RAM and CPU power, is to switch to larger LLMs: they do not have problems in this sense.
+    >A: This frequently occurs when your (small) LLM has a limited maximum hidden size (generally 512 or 1024) and the context that the retrieval-augmented chain produces goes beyond that maximum. You could, potentially, modify the configuration of the model, but this would mean dramatically increase its resource consumption, and your small laptop is not prepared to take it, trust me!!! A solution, if you have enough RAM and CPU power, is to switch to larger LLMs: they do not have problems in this sense.
+
+## Upcoming features🚀
+
+- [ ] Multi-lingual support (expected for **version 0.2.0**)
+
+- [ ] More text-based tasks: question answering, summarisation (expected for **version 0.3.0**)
+
+- [ ] Computer vision: Image-to-text, image generation, image segmentation... (expected for **version 1.0.0**)
 
 ## Contributing
 

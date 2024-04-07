@@ -46,7 +46,10 @@ def bot(history):
         filelist = []
         for i in history[-1][0]:
             filelist.append(i)
-        finalpdf = merge_pdfs(filelist)
+        if len(filelist) > 1:
+            finalpdf = merge_pdfs(filelist)
+        else:
+            finalpdf = filelist[0]
         vectordb = create_a_persistent_db(finalpdf, os.path.dirname(finalpdf)+"_localDB", os.path.dirname(finalpdf)+"_embcache")
         response = "VectorDB was successfully created, now you can ask me anything about the document you uploaded!😊"
         history[-1][1] = ""
@@ -74,6 +77,6 @@ with gr.Blocks() as demo:
 
 demo.queue()
 if __name__ == "__main__":
-    demo.launch(share=False)
+    demo.launch(server_name="0.0.0.0", share=False)
 
 	
