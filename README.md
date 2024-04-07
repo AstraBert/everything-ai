@@ -6,10 +6,10 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
 <div align="center">
     <img src="https://img.shields.io/github/languages/top/AstraBert/everything-rag" alt="GitHub top language">
    <img src="https://img.shields.io/github/commit-activity/t/AstraBert/everything-rag" alt="GitHub commit activity">
-   <img src="https://img.shields.io/badge/everything_rag-almost_completely_stable-green" alt="Static Badge">
-   <img src="https://img.shields.io/badge/Release-v0.1.1-blue" alt="Static Badge">
-   <img src="https://img.shields.io/badge/Docker_image_size-6.44GB-red" alt="Static Badge">
-   <img src="https://img.shields.io/badge/Supported_platforms-linux/amd64-purple" alt="Static Badge">
+   <img src="https://img.shields.io/badge/everything_rag-stable-green" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Release-v0.1.1-purple" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Docker_image_size-6.6GB-red" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Supported_platforms-linux/amd64-brown" alt="Static Badge">
    <div>
         <a href="https://huggingface.co/spaces/as-cle-bert/everything-rag"><img src="./data/example_chat.png" alt="Example chat" align="center"></a>
         <p><i>Example chat with everything-rag, mediated by google/flan-t5-base</i></p>
@@ -26,7 +26,7 @@ _Go and give it a try [here](https://hf.co/chat/assistant/660d9a4f590a7924eed02a
 3. [Using the Chatbot](#using-the-chatbot)
 4. [Troubleshooting](#troubleshooting)
 5. [Contributing](#contributing)
-6. [Upcoming features](#upcoming-features🚀) 
+6. [Upcoming features](#upcoming-features) 
 7. [References](#reference)
 
 ## TL;DR
@@ -78,7 +78,7 @@ docker run -p 7860:7860 everything-rag:latest -m microsoft/phi-2 -t text-generat
 ```
 - **IMPORTANT NOTE**: running the script within `docker run` does not log the port on which the app is running until you press `Ctrl+C`, but in that moment it also interrupt the execution! The app will run on port `0.0.0.0:7860` (or `localhost:7860` if your browser is Windows-based), so just make sure to open your browser on that port and to refresh it after 30s to 1 or 2 mins, when the model and the tokenizer should be loaded and the app should be ready to work!
 
-- As you can see, you just need to specify the LLM model and its task (this is mandatory). Keep in mind that, for what concerns v0.1.0, everything-rag supports only text-generation and text2text-generation. For these two tasks, you can use virtually *any* model from HuggingFace Hub: the sole recommendation is to watch out for your disk space, RAM and CPU power, LLMs can be quite resource-consuming!
+- As you can see, you just need to specify the LLM model and its task (this is mandatory). Keep in mind that, for what concerns v0.1.1, everything-rag supports only text-generation and text2text-generation. For these two tasks, you can use virtually *any* model from HuggingFace Hub: the sole recommendation is to watch out for your disk space, RAM and CPU power, LLMs can be quite resource-consuming!
 
 ## Using the Chatbot
 
