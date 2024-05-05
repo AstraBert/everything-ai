@@ -1,3 +1,4 @@
 flagged/
 scripts/__pycache__
-docker/build_command.sh
+docker/__pycache__
+docker/flagged
