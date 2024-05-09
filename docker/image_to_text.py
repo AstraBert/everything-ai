@@ -19,7 +19,8 @@ mod = mod.replace("\"", "").replace("'", "")
 
 model_checkpoint = mod
 
-pipe = pipeline("image-to-text", model=model_checkpoint)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+pipe = pipeline("image-to-text", model=model_checkpoint, device=device)
 
 def get_results(image, ppln=pipe):
     img = Image.fromarray(image)

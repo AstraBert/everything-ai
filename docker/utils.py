@@ -6,6 +6,10 @@ from qdrant_client import models
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 import os
+from datasets import load_dataset, Dataset
+import torch
+import numpy as np
+
 
 def remove_items(test_list, item): 
     res = [i for i in test_list if i != item] 
@@ -92,3 +96,71 @@ class Translation:
         translation = translator.translate(self.text)
         return translation
 
+class ImageDB:
+    def __init__(self, imagesdir, processor, model, client, dimension):
+        self.imagesdir = imagesdir
+        self.processor = processor
+        self.model = model
+        self.client = client
+        self.dimension = dimension
+        if os.path.basename(self.imagesdir) != "":
+            self.collection_name = os.path.basename(self.imagesdir)+"_ImagesCollection"
+        else:
+            if "\\" in self.imagesdir:
+               self.collection_name = self.imagesdir.split("\\")[-2]+"_ImagesCollection" 
+            else:
+                self.collection_name = self.imagesdir.split("/")[-2]+"_ImagesCollection" 
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.client.recreate_collection(
+            collection_name=self.collection_name,
+            vectors_config=models.VectorParams(size=self.dimension, distance=models.Distance.COSINE)
+        )
+    def get_embeddings(self, batch):
+        inputs = self.processor(images=batch['image'], return_tensors="pt").to(self.device)
+        with torch.no_grad():
+            outputs = self.model(**inputs).last_hidden_state.mean(dim=1).cpu().numpy()
+        batch['embeddings'] = outputs
+        return batch
+    def create_dataset(self):
+        self.dataset = load_dataset("imagefolder", data_dir=self.imagesdir, split="train")
+        self.dataset = self.dataset.map(self.get_embeddings, batched=True, batch_size=16)
+    def to_collection(self):
+        np.save(os.path.join(self.imagesdir, "vectors"), np.array(self.dataset['embeddings']), allow_pickle=False)
+
+        payload = self.dataset.select_columns([
+            "label"
+        ]).to_pandas().fillna(0).to_dict(orient="records")
+
+        ids = list(range(self.dataset.num_rows))
+        embeddings = np.load(os.path.join(self.imagesdir, "vectors.npy")).tolist()
+
+        batch_size = 1000
+
+        for i in range(0, self.dataset.num_rows, batch_size):
+
+            low_idx = min(i+batch_size, self.dataset.num_rows)
+
+            batch_of_ids = ids[i: low_idx]
+            batch_of_embs = embeddings[i: low_idx]
+            batch_of_payloads = payload[i: low_idx]
+
+            self.client.upsert(
+                collection_name = self.collection_name,
+                points=models.Batch(
+                    ids=batch_of_ids,
+                    vectors=batch_of_embs,
+                    payloads=batch_of_payloads
+                )
+            )
+    def searchDB(self, image):
+        dtst = {"image": [image], "label": ["None"]}
+        dtst = Dataset.from_dict(dtst)
+        dtst = dtst.map(self.get_embeddings, batched=True, batch_size=1)
+        img = dtst[0]
+        results = self.client.search(
+            collection_name=self.collection_name,
+            query_vector=img['embeddings'],
+            limit=4
+        )
+        return results
+    

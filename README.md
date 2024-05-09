@@ -57,6 +57,18 @@ Choose the task among:
 - *image-generation-pollinations*: stable diffusion, use Pollinations AI API; if you choose 'image-generation-pollinations', you do not need to specify anything else apart from the task - **MULTILINGUAL**
 - *image-classification*: classify an image, supports every image-classification model on HF Hub - **ENGLISH ONLY**
 - *image-to-text*:  describe an image, supports every image-to-text model on HF Hub - **ENGLISH ONLY**
+- *image-retrieval-search*: search an image database uploading a folder as database input. The folder should have the following structure:
+
+```
+./
+├── test/
+|   ├── label1/
+|   └── label2/
+└── train/
+    ├── label1/
+    └── label2/
+```
+You can query the database starting from your own pictures.
 
 ### 6. Go to `localhost:7860` and start using your assistant
 

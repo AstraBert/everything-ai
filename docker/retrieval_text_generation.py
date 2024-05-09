@@ -4,7 +4,7 @@ from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 from argparse import ArgumentParser
 from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
-import sys
+import torch
 import os
 
 argparse = ArgumentParser()
@@ -61,7 +61,8 @@ pdfdb.preprocess()
 pdfdb.collect_data()
 pdfdb.qdrant_collection_and_upload()
 
-model = AutoModelForCausalLM.from_pretrained(mod)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = AutoModelForCausalLM.from_pretrained(mod).to(device)
 tokenizer = AutoTokenizer.from_pretrained(mod)
 
 pipe = pipeline("text-generation", model=model, tokenizer=tokenizer, max_new_tokens=2048, repetition_penalty=1.2, temperature=0.4)

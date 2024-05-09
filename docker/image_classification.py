@@ -1,6 +1,7 @@
 from transformers import AutoModelForImageClassification, AutoImageProcessor, pipeline
 from PIL import Image
 from argparse import ArgumentParser
+import torch
 
 argparse = ArgumentParser()
 argparse.add_argument(
@@ -18,8 +19,10 @@ mod = mod.replace("\"", "").replace("'", "")
 
 model_checkpoint = mod
 
-model = AutoModelForImageClassification.from_pretrained(model_checkpoint)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = AutoModelForImageClassification.from_pretrained(model_checkpoint).to(device)
 processor = AutoImageProcessor.from_pretrained(model_checkpoint)
+
 
 pipe = pipeline("image-classification", model=model, image_processor=processor)
 

@@ -1,19 +1,22 @@
 import subprocess as sp
 import gradio as gr
 
-TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py"}
+TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py", "retrieval-image-search": "retrieval_image_search.py"}
 
 
-def build_command(tsk, mod="None", pdff="None", dirs="None", lan="None"):
-    if tsk != "retrieval-text-generation" and tsk != "image-generation-pollinations":
+def build_command(tsk, mod="None", pdff="None", dirs="None", lan="None", imdim="512"):
+    if tsk != "retrieval-text-generation" and tsk != "image-generation-pollinations" and tsk != "retrieval-image-search":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod}", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod}"
     elif tsk == "retrieval-text-generation":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod} -pf '{pdff}' -d '{dirs}' -l '{lan}'", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod} -pf '{pdff}' -d '{dirs}' -l '{lan}'"
-    else:
+    elif tsk == "image-generation-pollinations":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]}", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]}"
+    else:
+        sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -d {dirs} -id {imdim} -m {mod}", shell=True)
+        return f"python3 {TASK_TO_SCRIPT[tsk]} -d {dirs} -id {imdim} -m {mod}"
 
 demo = gr.Interface(
     build_command,
@@ -38,7 +41,7 @@ demo = gr.Interface(
         ),
         gr.Textbox(
             label="Directory",
-            info="Directory where all your pdfs of interest are stored (only available with 'retrieval-text-generation')",
+            info="Directory where all your pdfs or images (.jpg, .jpeg, .png) of interest are stored (only available with 'retrieval-text-generation' for pdfs and 'retrieval-image-search' for images)",
             lines=3,
             value="None",
         ),
@@ -47,6 +50,12 @@ demo = gr.Interface(
             info="Language of the written content contained in the pdfs",
             lines=3,
             value="None",
+        ),
+        gr.Textbox(
+            label="Image dimension",
+            info="Dimension of the image (this is generally model and/or task-dependent!)",
+            lines=3,
+            value=f"e.g.: 512, 384, 758...",
         ),
     ],
     outputs="textbox",

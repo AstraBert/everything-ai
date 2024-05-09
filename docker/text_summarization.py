@@ -5,6 +5,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from utils import merge_pdfs
 import gradio as gr
 import time
+import torch
 
 histr = [[None, "Hi, I'm **everything-ai-summarization**🤖.\nI'm here to assist you and let you summarize _your_ texts and _your_ pdfs!\nCheck [my website](https://astrabert.github.io/everything-ai/) for troubleshooting and documentation reference\nHave fun!😊"]]
 
@@ -24,7 +25,8 @@ mod = mod.replace("\"", "").replace("'", "")
 
 model_checkpoint = mod
 
-summarizer = pipeline("summarization", model=model_checkpoint)
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+summarizer = pipeline("summarization", model=model_checkpoint, device=device)
 
 def convert_none_to_str(l: list):
     newlist = []
