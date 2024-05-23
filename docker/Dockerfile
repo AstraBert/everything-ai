@@ -7,8 +7,8 @@ WORKDIR /app
 # Add the current directory contents into the container at /app
 ADD . /app
 
-# Add new package
-RUN python3 -m pip install datasets==2.15.0
+#Upgrade gradio
+RUN pip install autotrain-advanced
 
 # Expose the port that the application will run on
 EXPOSE 8760

@@ -57,6 +57,12 @@ Choose the task among:
 - *image-generation-pollinations*: stable diffusion, use Pollinations AI API; if you choose 'image-generation-pollinations', you do not need to specify anything else apart from the task - **MULTILINGUAL**
 - *image-classification*: classify an image, supports every image-classification model on HF Hub - **ENGLISH ONLY**
 - *image-to-text*:  describe an image, supports every image-to-text model on HF Hub - **ENGLISH ONLY**
+- *audio-classification*: classify audio files or microphone recordings, supports audio-classification models on HF hub
+- *speech-recognition*: transcribe audio files or microphone recordings, supports automatic-speech-recognition models on HF hub.
+- *video-generation*: generate video upon text prompt, supports text-to-video models on HF hub - **ENGLISH ONLY**
+- *protein-folding*: get the 3D structure of a protein from its amino-acid sequence, using ESM-2 backbone model - **GPU ONLY**
+- *autotrain*: fine-tune a model on a specific downstream task with autotrain-advanced, just by specifying you HF username, HF writing token and the path to a yaml config file for the training
+- *spaces-api-supabase*: use HF Spaces API in combination with Supabase PostgreSQL databases in order to unleash more powerful LLMs and larger RAG-oriented vector databases - **MULTILINGUAL**
 - *image-retrieval-search*: search an image database uploading a folder as database input. The folder should have the following structure:
 
 ```
@@ -68,6 +74,8 @@ Choose the task among:
     ├── label1/
     └── label2/
 ```
+
+
 You can query the database starting from your own pictures.
 
 ### 6. Go to `localhost:7860` and start using your assistant
