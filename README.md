@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/github/languages/top/AstraBert/everything-ai" alt="GitHub top language">
    <img src="https://img.shields.io/github/commit-activity/t/AstraBert/everything-ai" alt="GitHub commit activity">
    <img src="https://img.shields.io/badge/everything_ai-stable-green" alt="Static Badge">
-   <img src="https://img.shields.io/badge/Release-v1.0.0-purple" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Release-v2.0.0-purple" alt="Static Badge">
    <img src="https://img.shields.io/docker/image-size/astrabert/everything-ai
    " alt="Docker image size">
    <img src="https://img.shields.io/badge/Supported_platforms-Windows/macOS-brown" alt="Static Badge">
