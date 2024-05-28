@@ -8,7 +8,7 @@ WORKDIR /app
 ADD . /app
 
 #Upgrade gradio
-RUN pip install autotrain-advanced
+RUN pip install gradio_molecule3d
 
 # Expose the port that the application will run on
 EXPOSE 8760

@@ -25,11 +25,7 @@ demo = gr.Interface(
             lines=3,
             value=f"your-powerful-token",
         ),
-        gr.Textbox(
-            label="Yaml configuration file",
-            info="Path to the yaml configuration file containing the information to use autotrain",
-            lines=3,
-            value="/path/to/config.yaml",
+        gr.File(label="Yaml configuration file path"
         )
     ],
     title="everything-ai-autotrain",
