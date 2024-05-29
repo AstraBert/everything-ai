@@ -23,18 +23,26 @@ git clone https://github.com/AstraBert/everything-ai.git
 cd everything-ai
 ```
 ### 2. Set your `.env` file
-Modify the `VOLUME` variable in the .env file so that you can mount your local file system into Docker container.
+Modify:
+- `VOLUME` variable in the .env file so that you can mount your local file system into Docker container.
+- `MODELS_PATH` variable in the .env file so that you can tell llama.cpp where you stored the GGUF models you downloaded.
+- `MODEL` variable in the .env file so that you can tell llama.cpp what model to use (use the actual name of the gguf file, and do not forget the .gguf extension!)
+- `MAX_TOKENS` variable in the .env file so that you can tell llama.cpp how many new tokens it can generate as output.
 
-An example could be:
+An example of a `.env` file could be:
 ```bash
 VOLUME="c:/Users/User/:/User/"
+MODELS_PATH="c:/Users/User/.cache/llama.cpp/"
+MODEL="stories260K.gguf"
+MAX_TOKENS="512"
 ```
-This means that now everything that is under "c:/Users/User/" on your local machine is under "/User/" in your Docker container.
+This means that now everything that is under "c:/Users/User/" on your local machine is under "/User/" in your Docker container, that llama.cpp knows where to look for models and what model to look for, along with the maximum new tokens for its output.
 
 ### 3. Pull the necessary images
 ```bash
-docker pull astrabert/everything-ai
-docker pull qdrant/qdrant
+docker pull astrabert/everything-ai:latest
+docker pull qdrant/qdrant:latest
+docker pull ghcr.io/ggerganov/llama.cpp:server
 ```
 ### 4. Run the multi-container app
 ```bash
@@ -63,6 +71,7 @@ Choose the task among:
 - *protein-folding*: get the 3D structure of a protein from its amino-acid sequence, using ESM-2 backbone model - **GPU ONLY**
 - *autotrain*: fine-tune a model on a specific downstream task with autotrain-advanced, just by specifying you HF username, HF writing token and the path to a yaml config file for the training
 - *spaces-api-supabase*: use HF Spaces API in combination with Supabase PostgreSQL databases in order to unleash more powerful LLMs and larger RAG-oriented vector databases - **MULTILINGUAL**
+- *llama.cpp-and-qdrant*: same as *retrieval-text-generation*, but uses **llama.cpp** as inference engine, so you MUST NOT specify a model - **MULTILINGUAL**
 - *image-retrieval-search*: search an image database uploading a folder as database input. The folder should have the following structure:
 
 ```
@@ -87,4 +96,3 @@ Once everything is ready, you can head over to `localhost:7860` and start using 
 </div>
 
 
-## Complete documentation is coming soon...🚀

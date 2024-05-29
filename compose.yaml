@@ -6,7 +6,7 @@ services:
   everything-ai:
     image: astrabert/everything-ai
     volumes:
-      - ${VOLUME}
+      - $VOLUME
     networks:
       - mynet
     ports:
@@ -20,3 +20,13 @@ services:
       - "./qdrant_storage:/qdrant/storage"
     networks:
       - mynet
+  llama_server:
+    image: ghcr.io/ggerganov/llama.cpp:server
+    ports:
+      - "8000:8000"
+    volumes:
+      - "$MODELS_PATH:/models"
+    networks:
+      - mynet
+    command: "-m /models/$MODEL --port 8000 --host 0.0.0.0 -n $MAX_TOKENS"
+  

@@ -48,10 +48,10 @@ dirs = args.directory
 lan = args.language
 
 
-if pdff.replace("\\","").replace("'","") != "None" and dirs.replace("\\","").replace("'","") == "None":
-    pdfs = pdff.replace("\\","").replace("'","").split(",")
+if pdff.replace("\\","").replace("'","") != "None" and dirs.replace("\\","").replace("'","") == "No directory":
+    pdfs = pdff.replace("\\","/").replace("'","").split(",")
 else:
-    pdfs = [os.path.join(dirs.replace("\\","").replace("'",""), f) for f in os.listdir(dirs.replace("\\","").replace("'","")) if f.endswith(".pdf")]
+    pdfs = [os.path.join(dirs.replace("\\","/").replace("'",""), f) for f in os.listdir(dirs.replace("\\","/").replace("'","")) if f.endswith(".pdf")]
 
 client = QdrantClient(host="host.docker.internal", port="6333")
 encoder = SentenceTransformer("all-MiniLM-L6-v2")

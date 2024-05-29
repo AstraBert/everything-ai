@@ -7,9 +7,6 @@ WORKDIR /app
 # Add the current directory contents into the container at /app
 ADD . /app
 
-#Upgrade gradio
-RUN pip install gradio_molecule3d
-
 # Expose the port that the application will run on
 EXPOSE 8760
 

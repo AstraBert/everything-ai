@@ -1,16 +1,19 @@
 import subprocess as sp
 import gradio as gr
 
-TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py", "retrieval-image-search": "retrieval_image_search.py", "protein-folding": "protein_folding_with_esm.py", "video-generation": "video_generation.py", "speech-recognition": "speech_recognition.py", "spaces-api-supabase": "spaces_api_supabase.py", "audio-classification": "audio_classification.py", "autotrain": "autotrain_interface.py"}
+TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py", "retrieval-image-search": "retrieval_image_search.py", "protein-folding": "protein_folding_with_esm.py", "video-generation": "video_generation.py", "speech-recognition": "speech_recognition.py", "spaces-api-supabase": "spaces_api_supabase.py", "audio-classification": "audio_classification.py", "autotrain": "autotrain_interface.py", "llama.cpp-and-qdrant": "llama_cpp_int.py"}
 
 
 def build_command(tsk, mod="None", pdff="None", dirs="None", lan="None", imdim="512", gradioclient="None", supabaseurl="None", collectname="None", supenc="all-MiniLM-L6-v2", supdim="384"):
-    if tsk != "retrieval-text-generation" and tsk != "image-generation-pollinations" and tsk != "retrieval-image-search" and tsk != "autotrain" and tsk != "protein-folding" and tsk != "spaces-api-supabase":
+    if tsk != "retrieval-text-generation" and tsk != "image-generation-pollinations" and tsk != "retrieval-image-search" and tsk != "autotrain" and tsk != "protein-folding" and tsk != "spaces-api-supabase" and tsk != "llama.cpp-and-qdrant":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod}", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod}"
     elif tsk == "retrieval-text-generation":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod} -pf '{pdff}' -d '{dirs}' -l '{lan}'", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod} -pf '{pdff}' -d '{dirs}' -l '{lan}'"
+    elif tsk == "llama.cpp-and-qdrant":
+        sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -pf '{pdff}' -d '{dirs}' -l '{lan}'", shell=True)
+        return f"python3 {TASK_TO_SCRIPT[tsk]} -pf '{pdff}' -d '{dirs}' -l '{lan}'"
     elif tsk == "image-generation-pollinations" or tsk == "autotrain" or tsk == "protein-folding":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]}", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]}"
@@ -41,15 +44,15 @@ demo = gr.Interface(
         ),
         gr.Textbox(
             label="PDF file(s)",
-            info="Single pdf file or N pdfs reported like this: /path/to/file1.pdf,/path/to/file2.pdf,...,/path/to/fileN.pdf (there is no strict naming, you just need to provide them comma-separated): only available with 'retrieval-text-generation'",
+            info="Single pdf file or N pdfs reported like this: /path/to/file1.pdf,/path/to/file2.pdf,...,/path/to/fileN.pdf (there is no strict naming, you just need to provide them comma-separated), please do not use '\\' as path separators: only available with 'retrieval-text-generation'",
             lines=3,
-            value="None",
+            value="No file",
         ),
         gr.Textbox(
             label="Directory",
-            info="Directory where all your pdfs or images (.jpg, .jpeg, .png) of interest are stored (only available with 'retrieval-text-generation' for pdfs and 'retrieval-image-search' for images)",
+            info="Directory where all your pdfs or images (.jpg, .jpeg, .png) of interest are stored (only available with 'retrieval-text-generation' for pdfs and 'retrieval-image-search' for images). Please do not use '\\' as path separators",
             lines=3,
-            value="None",
+            value="No directory",
         ),
         gr.Textbox(
             label="Language",
