@@ -56,7 +56,7 @@ pdfdb.qdrant_collection_and_upload()
 import requests
 
 def llama_cpp_respond(query, max_new_tokens):
-    url = "http://host.docker.internal:8000/completion"
+    url = "http://localhost:8000/completion"
     headers = {
         "Content-Type": "application/json"
     }
@@ -77,7 +77,7 @@ def reply(max_new_tokens, message):
     if txt.original == "en" and lan.replace("\\","").replace("'","") == "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         results = txt2txt.search(message)
-        response = llama_cpp_respond(results[0]["text"], max_new_tokens)
+        response = llama_cpp_respond(f"Context: {results[0]["text"]}, prompt: {message}", max_new_tokens)
         return response
     elif txt.original == "en" and lan.replace("\\","").replace("'","") != "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
@@ -86,14 +86,14 @@ def reply(max_new_tokens, message):
         results = txt2txt.search(message)
         t = Translation(results[0]["text"], txt.original)
         res = t.translatef()
-        response = llama_cpp_respond(res, max_new_tokens)
+        response = llama_cpp_respond(f"Context: {res}, prompt: {message}", max_new_tokens)
         return response
     elif txt.original != "en" and lan.replace("\\","").replace("'","") == "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         results = txt2txt.search(message)
         transl = Translation(results[0]["text"], "en")
         translation = transl.translatef()
-        response = llama_cpp_respond(translation, max_new_tokens)
+        response = llama_cpp_respond(f"Context: {translation}, prompt: {message}", max_new_tokens)
         t = Translation(response, txt.original)
         res = t.translatef()
         return res
@@ -104,7 +104,7 @@ def reply(max_new_tokens, message):
         results = txt2txt.search(message)
         t = Translation(results[0]["text"], txt.original)
         res = t.translatef()
-        response = llama_cpp_respond(res, max_new_tokens)
+        response = llama_cpp_respond(f"Context: {res}, prompt: {message}", max_new_tokens)
         tr = Translation(response, txt.original)
         ress = tr.translatef()
         return ress 

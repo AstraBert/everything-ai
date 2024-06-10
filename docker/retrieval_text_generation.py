@@ -73,7 +73,7 @@ def reply(message, history):
     if txt.original == "en" and lan.replace("\\","").replace("'","") == "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         results = txt2txt.search(message)
-        response = pipe(results[0]["text"])
+        response = pipe(f"Context: {results[0]["text"]}, prompt: {message}")
         return response[0]["generated_text"]
     elif txt.original == "en" and lan.replace("\\","").replace("'","") != "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
@@ -82,14 +82,14 @@ def reply(message, history):
         results = txt2txt.search(message)
         t = Translation(results[0]["text"], txt.original)
         res = t.translatef()
-        response = pipe(res)
+        response = pipe(f"Context: {res}, prompt: {message}")
         return response[0]["generated_text"]
     elif txt.original != "en" and lan.replace("\\","").replace("'","") == "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         results = txt2txt.search(message)
         transl = Translation(results[0]["text"], "en")
         translation = transl.translatef()
-        response = pipe(translation)
+        response = pipe(f"Context: {translation}, prompt: {message}")
         t = Translation(response[0]["generated_text"], txt.original)
         res = t.translatef()
         return res
@@ -100,7 +100,7 @@ def reply(message, history):
         results = txt2txt.search(message)
         t = Translation(results[0]["text"], txt.original)
         res = t.translatef()
-        response = pipe(res)
+        response = pipe(f"Context: {res}, prompt: {message}")
         tr = Translation(response[0]["generated_text"], txt.original)
         ress = tr.translatef()
         return ress 

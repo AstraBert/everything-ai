@@ -72,6 +72,7 @@ Choose the task among:
 - *autotrain*: fine-tune a model on a specific downstream task with autotrain-advanced, just by specifying you HF username, HF writing token and the path to a yaml config file for the training
 - *spaces-api-supabase*: use HF Spaces API in combination with Supabase PostgreSQL databases in order to unleash more powerful LLMs and larger RAG-oriented vector databases - **MULTILINGUAL**
 - *llama.cpp-and-qdrant*: same as *retrieval-text-generation*, but uses **llama.cpp** as inference engine, so you MUST NOT specify a model - **MULTILINGUAL**
+- *build-your-llm*: Build a customizable chat LLM combining a Qdrant database with your PDFs and the power of Anthropic, OpenAI, Cohere or Groq models: you just need an API key! To build the Qdrant database, have to pass either a pdf/a bunch of pdfs specified as comma-separated paths or a directory where all the pdfs of interest are stored (**DO NOT** provide both); you can also specify the language in which the PDF is written, using [ISO nomenclature](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) - **MULTILINGUAL**
 - *image-retrieval-search*: search an image database uploading a folder as database input. The folder should have the following structure:
 
 ```

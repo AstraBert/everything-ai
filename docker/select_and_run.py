@@ -1,17 +1,17 @@
 import subprocess as sp
 import gradio as gr
 
-TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py", "retrieval-image-search": "retrieval_image_search.py", "protein-folding": "protein_folding_with_esm.py", "video-generation": "video_generation.py", "speech-recognition": "speech_recognition.py", "spaces-api-supabase": "spaces_api_supabase.py", "audio-classification": "audio_classification.py", "autotrain": "autotrain_interface.py", "llama.cpp-and-qdrant": "llama_cpp_int.py"}
+TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py", "retrieval-image-search": "retrieval_image_search.py", "protein-folding": "protein_folding_with_esm.py", "video-generation": "video_generation.py", "speech-recognition": "speech_recognition.py", "spaces-api-supabase": "spaces_api_supabase.py", "audio-classification": "audio_classification.py", "autotrain": "autotrain_interface.py", "llama.cpp-and-qdrant": "llama_cpp_int.py", "build-your-llm": "build_your_llm.py"}
 
 
 def build_command(tsk, mod="None", pdff="None", dirs="None", lan="None", imdim="512", gradioclient="None", supabaseurl="None", collectname="None", supenc="all-MiniLM-L6-v2", supdim="384"):
-    if tsk != "retrieval-text-generation" and tsk != "image-generation-pollinations" and tsk != "retrieval-image-search" and tsk != "autotrain" and tsk != "protein-folding" and tsk != "spaces-api-supabase" and tsk != "llama.cpp-and-qdrant":
+    if tsk != "retrieval-text-generation" and tsk != "image-generation-pollinations" and tsk != "retrieval-image-search" and tsk != "autotrain" and tsk != "protein-folding" and tsk != "spaces-api-supabase" and tsk != "llama.cpp-and-qdrant" and tsk!="build-your-llm":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod}", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod}"
     elif tsk == "retrieval-text-generation":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod} -pf '{pdff}' -d '{dirs}' -l '{lan}'", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -m {mod} -pf '{pdff}' -d '{dirs}' -l '{lan}'"
-    elif tsk == "llama.cpp-and-qdrant":
+    elif tsk == "llama.cpp-and-qdrant" or tsk== "build-your-llm":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -pf '{pdff}' -d '{dirs}' -l '{lan}'", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -pf '{pdff}' -d '{dirs}' -l '{lan}'"
     elif tsk == "image-generation-pollinations" or tsk == "autotrain" or tsk == "protein-folding":
