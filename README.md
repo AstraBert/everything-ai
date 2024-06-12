@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/github/languages/top/AstraBert/everything-ai" alt="GitHub top language">
    <img src="https://img.shields.io/github/commit-activity/t/AstraBert/everything-ai" alt="GitHub commit activity">
    <img src="https://img.shields.io/badge/everything_ai-stable-green" alt="Static Badge">
-   <img src="https://img.shields.io/badge/Release-v3.0.0-purple" alt="Static Badge">
+   <img src="https://img.shields.io/badge/Release-v4.1.0-purple" alt="Static Badge">
    <img src="https://img.shields.io/docker/image-size/astrabert/everything-ai
    " alt="Docker image size">
    <img src="https://img.shields.io/badge/Supported_platforms-Windows/macOS-brown" alt="Static Badge">
@@ -72,7 +72,8 @@ Choose the task among:
 - *autotrain*: fine-tune a model on a specific downstream task with autotrain-advanced, just by specifying you HF username, HF writing token and the path to a yaml config file for the training
 - *spaces-api-supabase*: use HF Spaces API in combination with Supabase PostgreSQL databases in order to unleash more powerful LLMs and larger RAG-oriented vector databases - **MULTILINGUAL**
 - *llama.cpp-and-qdrant*: same as *retrieval-text-generation*, but uses **llama.cpp** as inference engine, so you MUST NOT specify a model - **MULTILINGUAL**
-- *build-your-llm*: Build a customizable chat LLM combining a Qdrant database with your PDFs and the power of Anthropic, OpenAI, Cohere or Groq models: you just need an API key! To build the Qdrant database, have to pass either a pdf/a bunch of pdfs specified as comma-separated paths or a directory where all the pdfs of interest are stored (**DO NOT** provide both); you can also specify the language in which the PDF is written, using [ISO nomenclature](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) - **MULTILINGUAL**
+- *build-your-llm*: Build a customizable chat LLM combining a Qdrant database with your PDFs and the power of Anthropic, OpenAI, Cohere or Groq models: you just need an API key! To build the Qdrant database, have to pass either a pdf/a bunch of pdfs specified as comma-separated paths or a directory where all the pdfs of interest are stored (**DO NOT** provide both); you can also specify the language in which the PDF is written, using [ISO nomenclature](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) - **MULTILINGUAL**, **LANGFUSE INTEGRATION**
+- *build-your-llm*: Build a customizable chat LLM with the power of Anthropic, OpenAI, Cohere or Groq models (no RAG pipeline): you just need an API key! - **MULTILINGUAL**, **LANGFUSE INTEGRATION**
 - *image-retrieval-search*: search an image database uploading a folder as database input. The folder should have the following structure:
 
 ```

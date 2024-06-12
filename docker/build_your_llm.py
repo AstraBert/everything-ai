@@ -12,6 +12,8 @@ from sentence_transformers import SentenceTransformer
 from utils import *
 import os
 import subprocess as sp
+import time
+from langfuse.callback import CallbackHandler
 
 argparse = ArgumentParser()
 
@@ -72,9 +74,18 @@ NAME2APIKEY = {"Cohere": "COHERE_API_KEY", "claude-3-opus-20240229": "ANTHROPIC_
 
 system_template = "You are an helpful assistant that can rely on this: {context} and on the previous message history as context, and from that you build a context and history-aware reply to this user input:"
 
+def build_langfuse_handler(langfuse_host, langfuse_pkey, langfuse_skey):
+    if langfuse_host!="None" and langfuse_pkey!="None" and langfuse_skey!="None":
+        langfuse_handler = CallbackHandler(
+            public_key=langfuse_pkey,
+            secret_key=langfuse_skey,
+            host=langfuse_host
+        )
+        return langfuse_handler, True
+    else:
+        return "No langfuse", False
 
-
-def reply(message, history, name, api_key, temperature, max_new_tokens, sessionid):
+def reply(message, history, name, api_key, temperature, max_new_tokens,langfuse_host, langfuse_pkey, langfuse_skey, sessionid):
     global pdfdb
     os.environ[NAME2APIKEY[name]]  = api_key
     if name == "Cohere":
@@ -86,6 +97,7 @@ def reply(message, history, name, api_key, temperature, max_new_tokens, sessioni
     MessagesPlaceholder(variable_name="history"),
     ("human", "{input}")]
     )
+    lf_handler, truth = build_langfuse_handler(langfuse_host, langfuse_pkey, langfuse_skey)
     chain = prompt_template | model
     runnable_with_history = RunnableWithMessageHistory(
         chain,
@@ -97,8 +109,15 @@ def reply(message, history, name, api_key, temperature, max_new_tokens, sessioni
     if txt.original == "en" and lan.replace("\\","").replace("'","") == "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         results = txt2txt.search(message)
-        response = runnable_with_history.invoke({"context": results[0]["text"], "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
-        return response.content
+        if not truth:
+            response = runnable_with_history.invoke({"context": results[0]["text"], "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
+        else:
+            response = runnable_with_history.invoke({"context": results[0]["text"], "input": message}, config={"configurable": {"session_id": sessionid}, "callbacks": [lf_handler]})##CONFIGURE!
+        llm=''
+        for char in response.content:
+            llm+=char
+            time.sleep(0.001)
+            yield llm 
     elif txt.original == "en" and lan.replace("\\","").replace("'","") != "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         transl = Translation(message, lan.replace("\\","").replace("'",""))
@@ -106,17 +125,31 @@ def reply(message, history, name, api_key, temperature, max_new_tokens, sessioni
         results = txt2txt.search(message)
         t = Translation(results[0]["text"], txt.original)
         res = t.translatef()
-        response = runnable_with_history.invoke({"context": res, "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
-        return response.content
+        if not truth:
+            response = runnable_with_history.invoke({"context": res, "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
+        else:
+            response = runnable_with_history.invoke({"context": res, "input": message}, config={"configurable": {"session_id": sessionid}, "callbacks": [lf_handler]})##CONFIGURE!
+        llm = ''
+        for char in response.content:
+            llm+=char
+            time.sleep(0.001)
+            yield llm 
     elif txt.original != "en" and lan.replace("\\","").replace("'","") == "None":
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         results = txt2txt.search(message)
         transl = Translation(results[0]["text"], "en")
         translation = transl.translatef()
-        response = runnable_with_history.invoke({"context": translation, "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
+        if not truth:
+            response = runnable_with_history.invoke({"context": translation, "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
+        else:
+            response = runnable_with_history.invoke({"context": translation, "input": message}, config={"configurable": {"session_id": sessionid}, "callbacks": [lf_handler]})##CONFIGURE!
         t = Translation(response.content, txt.original)
         res = t.translatef()
-        return res
+        llm = ''
+        for char in res:
+            llm+=char
+            time.sleep(0.001)
+            yield llm 
     else:
         txt2txt = NeuralSearcher(pdfdb.collection_name, pdfdb.client, pdfdb.encoder)
         transl = Translation(message, lan.replace("\\","").replace("'",""))
@@ -124,10 +157,17 @@ def reply(message, history, name, api_key, temperature, max_new_tokens, sessioni
         results = txt2txt.search(message)
         t = Translation(results[0]["text"], txt.original)
         res = t.translatef()
-        response = runnable_with_history.invoke({"context": res, "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
+        if not truth:
+            response = runnable_with_history.invoke({"context": res, "input": message}, config={"configurable": {"session_id": sessionid}})##CONFIGURE!
+        else:
+            response = runnable_with_history.invoke({"context": res, "input": message}, config={"configurable": {"session_id": sessionid}, "callbacks": [lf_handler]})##CONFIGURE!
         tr = Translation(response.content, txt.original)
         ress = tr.translatef()
-        return ress 
+        llm = ''
+        for char in ress:
+            llm+=char
+            time.sleep(0.001)
+            yield llm 
     
 chat_model = gr.Dropdown(
     [m for m in list(NAME2APIKEY)], label="Chat Model", info="Choose one of the available chat models"
@@ -144,11 +184,17 @@ user_temperature = gr.Slider(0, 1, value=0.5, label="Temperature", info="Select 
 
 user_max_new_tokens = gr.Slider(0, 8192, value=1024, label="Max new tokens", info="Select max output tokens (higher number of tokens will result in a longer latency)")
 
+user_lf_host = gr.Textbox(label="LangFuse Host",info="Provide LangFuse host URL, or type 'None' if you do not wish to use LangFuse",value="https://cloud.langfuse.com")
+
+user_lf_pkey = gr.Textbox(label="LangFuse Public Key",info="Provide LangFuse Public key, or type 'None' if you do not wish to use LangFuse",value="pk-*************************", type="password")
+
+user_lf_skey = gr.Textbox(label="LangFuse Secret Key",info="Provide LangFuse Secret key, or type 'None' if you do not wish to use LangFuse",value="sk-*************************", type="password")
+
 user_session_id = gr.Textbox(label="Session ID",info="This alphanumeric code will link model reply to a specific message history of which the models will be aware when replying. Changing it will result in the loss of memory for your model",value="1")
 
 additional_accordion = gr.Accordion(label="Parameters to be set before you start chatting", open=True)
 
-demo = gr.ChatInterface(fn=reply, additional_inputs=[chat_model, user_api_key, user_temperature, user_max_new_tokens, user_session_id], additional_inputs_accordion=additional_accordion, title="everything-ai-buildyourllm")
+demo = gr.ChatInterface(fn=reply, additional_inputs=[chat_model, user_api_key, user_temperature, user_max_new_tokens, user_lf_host, user_lf_pkey, user_lf_skey, user_session_id], additional_inputs_accordion=additional_accordion, title="everything-ai-buildyourllm")
 
 
 if __name__=="__main__":

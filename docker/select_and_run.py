@@ -1,7 +1,7 @@
 import subprocess as sp
 import gradio as gr
 
-TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py", "retrieval-image-search": "retrieval_image_search.py", "protein-folding": "protein_folding_with_esm.py", "video-generation": "video_generation.py", "speech-recognition": "speech_recognition.py", "spaces-api-supabase": "spaces_api_supabase.py", "audio-classification": "audio_classification.py", "autotrain": "autotrain_interface.py", "llama.cpp-and-qdrant": "llama_cpp_int.py", "build-your-llm": "build_your_llm.py"}
+TASK_TO_SCRIPT = {"retrieval-text-generation": "retrieval_text_generation.py", "agnostic-text-generation": "agnostic_text_generation.py", "text-summarization": "text_summarization.py", "image-generation": "image_generation.py", "image-generation-pollinations": "image_generation_pollinations.py", "image-classification": "image_classification.py", "image-to-text": "image_to_text.py", "retrieval-image-search": "retrieval_image_search.py", "protein-folding": "protein_folding_with_esm.py", "video-generation": "video_generation.py", "speech-recognition": "speech_recognition.py", "spaces-api-supabase": "spaces_api_supabase.py", "audio-classification": "audio_classification.py", "autotrain": "autotrain_interface.py", "llama.cpp-and-qdrant": "llama_cpp_int.py", "build-your-llm": "build_your_llm.py", "simply-chatting": "chat_your_llm.py"}
 
 
 def build_command(tsk, mod="None", pdff="None", dirs="None", lan="None", imdim="512", gradioclient="None", supabaseurl="None", collectname="None", supenc="all-MiniLM-L6-v2", supdim="384"):
@@ -14,7 +14,7 @@ def build_command(tsk, mod="None", pdff="None", dirs="None", lan="None", imdim="
     elif tsk == "llama.cpp-and-qdrant" or tsk== "build-your-llm":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]} -pf '{pdff}' -d '{dirs}' -l '{lan}'", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]} -pf '{pdff}' -d '{dirs}' -l '{lan}'"
-    elif tsk == "image-generation-pollinations" or tsk == "autotrain" or tsk == "protein-folding":
+    elif tsk == "image-generation-pollinations" or tsk == "autotrain" or tsk == "protein-folding" or tsk=="simply-chatting":
         sp.run(f"python3 {TASK_TO_SCRIPT[tsk]}", shell=True)
         return f"python3 {TASK_TO_SCRIPT[tsk]}"
     elif tsk == "spaces-api-supabase":
@@ -34,7 +34,7 @@ demo = gr.Interface(
             label="Task",
             info="Task you want your assistant to help you with",
             lines=3,
-            value=f"Choose one of the following: {','.join(list(TASK_TO_SCRIPT.keys()))}; if you choose 'image-generation-pollinations' or 'autotrain' or 'protein-folding', you do not need to specify anything else. If you choose 'spaces-api-supabase' you need to specify the Spaces API client, the database URL, the collection name, the Sentence-Transformers encoder used to upload the vectors to the Supabase database and the vectors size (optionally also the language)",
+            value=f"Choose one of the following: {','.join(list(TASK_TO_SCRIPT.keys()))}; if you choose 'image-generation-pollinations' or 'autotrain' or 'protein-folding' or 'simply-chatting', you do not need to specify anything else. If you choose 'spaces-api-supabase' you need to specify the Spaces API client, the database URL, the collection name, the Sentence-Transformers encoder used to upload the vectors to the Supabase database and the vectors size (optionally also the language)",
         ),
         gr.Textbox(
             label="Model",
